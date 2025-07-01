@@ -1,8 +1,9 @@
 const functions = require('firebase-functions');
 
-const admin = require('firebase-admin');
+const admin = require('
+acct_1RcjDXJnh7g2pvRQ');
 
-const stripe = require('stripe')('YOUR_STRIPE_SECRET_KEY');
+const stripe = require('stripe')('9ddb3b9f84555e18966b931c9e09ffc3560e2060');
 
 
 
@@ -24,9 +25,28 @@ exports.createCheckoutSession = functions.https.onRequest(async (req, res) => {
 
             line_items: [{
 
-                price: 'YOUR_STRIPE_PRICE_ID', // Create a price in Stripe dashboard
+                price: 'prod_SbOaoBQ9eQT6jD', // Create a price in Stripe dashboard
 
                 quantity: 1
+                {
+  "id": "price_1RgBnTJnh7g2pvRQlSyIBhO2",
+  "object": "price",
+  "active": true,
+  "currency": "usd",
+  "custom_unit_amount": null,
+  "nickname": null,
+  "recurring": {
+    "aggregate_usage": null,
+    "interval": "month",
+    "interval_count": 1,
+    "trial_period_days": null,
+    "usage_type": "licensed"
+  },
+  "tiers_mode": null,
+  "transform_quantity": null,
+  "unit_amount": 2000000,
+  "unit_amount_decimal": "2000000"
+}
 
             }],
 
