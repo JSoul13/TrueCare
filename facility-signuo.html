@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join as a Facility - Trusted Treatment Connect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Trusted Treatment Connect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="patient-form.html">Patient Form</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="facility-signup.html">For Facilities</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Facility Signup Section -->
+    <section class="facility-signup py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Join Our Network of Trusted Facilities</h2>
+            <p class="text-center mb-4">Get priority access to verified patient leads with insurance you accept.</p>
+            <form id="facilityForm" class="row g-3">
+                <div class="col-md-6">
+                    <label for="facilityName" class="form-label">Facility Name</label>
+                    <input type="text" class="form-control" id="facilityName" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="facilityEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="facilityEmail" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="facilityWebsite" class="form-label">Website</label>
+                    <input type="url" class="form-control" id="facilityWebsite" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="facilityLocation" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="facilityLocation" required>
+                </div>
+                <div class="col-12">
+                    <label for="insuranceAccepted" class="form-label">Accepted Insurance (e.g., HMO, PPO, Providers)</label>
+                    <textarea class="form-control" id="insuranceAccepted" required></textarea>
+                </div>
+                <div class="col-12">
+                    <button type="button" class="btn btn-primary" onclick="subscribeFacility()">Subscribe with Stripe</button>
+                </div>
+            </form>
+            <div id="facilityMessage" class="mt-3"></div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2025 Trusted Treatment Connect. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase and Stripe SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
