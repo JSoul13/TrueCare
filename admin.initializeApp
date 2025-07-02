@@ -5,12 +5,12 @@ exports.createCheckoutSession = functions.https.onRequest(async (req, res) => {
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [{
-                price: 'YOUR_STRIPE_PRICE_ID', // Create a price in Stripe dashboard
+                price: 'prod_SbOaoBQ9eQT6jDD', // Create a price in Stripe dashboard
                 quantity: 1
             }],
             mode: 'subscription',
-            success_url: 'https://YOUR_DOMAIN/facility-signup.html?success=true',
-            cancel_url: 'https://YOUR_DOMAIN/facility-signup.html?success=false',
+            success_url: 'https://https://true-treat-patient-care.web.app//facility-signup.html?success=true',
+            cancel_url: 'https://https://true-treat-patient-care.web.app//facility-signup.html?success=false',
             metadata: { facilityId }
         });
 
