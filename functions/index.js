@@ -52,9 +52,9 @@ exports.createCheckoutSession = functions.https.onRequest(async (req, res) => {
 
             mode: 'subscription',
 
-            success_url: 'https://YOUR_DOMAIN/facility-signup.html?success=true',
+            success_url: 'https://https://true-treat-patient-care.web.app//facility-signup.html?success=true',
 
-            cancel_url: 'https://YOUR_DOMAIN/facility-signup.html?success=false',
+            cancel_url: 'https://https://true-treat-patient-care.web.app//facility-signup.html?success=false',
 
             metadata: { facilityId }
 
