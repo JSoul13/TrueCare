@@ -1,442 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TrueCare - Patient Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#1D4ED8',
-            accent: '#2DD4BF',
-            background: '#F9FAFB',
-            text: '#1F2937'
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getFirestore, collection, addDoc, getDocs, where, query } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-    
-     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyB07SQVX49vHx7oDWQjM3AzvDZnuMxKXLA",
-  authDomain: "true-treat-patient-care.firebaseapp.com",
-  projectId: "true-treat-patient-care",
-  storageBucket: "true-treat-patient-care.firebasestorage.app",
-  messagingSenderId: "458873266752",
-  appId: "1:458873266752:web:c41f4bd6814d8b25a375a5",
-  measurementId: "G-M7MN9614H5"
-    };
-
-    try {
-      const app = initializeApp(firebaseConfig);
-      window.db = getFirestore(app);
-      console.log("Firebase initialized successfully");
-    } catch (error) {
-      console.error("Firebase initialization failed:", error);
-    }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cyberpunk Treatment Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
   <style>
-    .signature-pad {
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 600px;
-      height: 150px;
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
     }
-    .gradient-bg {
-      background: linear-gradient(135deg, #1D4ED8 0%, #2DD4BF 100%);
+    body, html {
+      margin: 0; padding: 0;
+      height: 100%;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      font-family: 'Orbitron', sans-serif;
+      color: #00fff7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: #121224;
+      box-shadow: 0 0 15px #00fff7;
+      text-align: center;
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 480px;
+      padding: 2rem;
+      margin-top: 2rem;
+      background: #121224;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #00fff7;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      font-size: 2rem;
+      text-shadow: 0 0 8px #00fff7;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+    }
+
+    input, select {
+      margin-top: 0.3rem;
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      border: 2px solid #00fff7;
+      border-radius: 6px;
+      background: #1a1a2e;
+      color: #00fff7;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #ff00ff;
+      box-shadow: 0 0 8px #ff00ff;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      margin-right: 0.6rem;
+      vertical-align: middle;
+      accent-color: #ff00ff;
+      cursor: pointer;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    button {
+      margin-top: 2rem;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #121224;
+      background: linear-gradient(90deg, #ff00ff, #00fff7);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff00ff;
+      transition: background 0.4s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #00fff7, #ff00ff);
+      box-shadow: 0 0 25px #00fff7;
+    }
+
+    /* Responsive */
+    @media (max-width: 520px) {
+      main {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
-<body class="bg-background font-sans text-text">
-  <header class="gradient-bg text-white py-6">
-    <div class="container mx-auto px-4">
-      <h1 class="text-3xl font-bold">TrueCare</h1>
-      <nav class="mt-3">
-        <a href="#home" class="mr-4 hover:underline text-white">Home</a>
-        <a href="#patient" class="mr-4 hover:underline text-white">Patient Portal</a>
-        <a href="#facility" class="mr-4 hover:underline text-white">Facility Portal</a>
-        <a href="#contact" class="hover:underline text-white">Contact</a>
-      </nav>
-    </div>
+<body>
+  <header>
+    Cyberpunk Treatment Platform
   </header>
 
-  <main class="container mx-auto px-4 py-8">
-    <!-- Homepage Sponsors Section -->
-    <section id="home" class="bg-white p-6 rounded-lg shadow-lg mb-8">
-      <h2 class="text-2xl font-semibold mb-4 text-primary">Welcome to TrueCare</h2>
-      <p class="text-text mb-4">Connecting patients with top-tier treatment facilities, backed by our trusted sponsors.</p>
-      <h3 class="text-lg font-semibold mb-4 text-primary">Our Sponsors</h3>
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <img src="https://via.placeholder.com/150x50?text=NYShip+Logo" alt="NYShip Logo" class="h-12 object-contain">
-        <img src="https://via.placeholder.com/150x50?text=BCBS+Logo" alt="BCBS Logo" class="h-12 object-contain">
-        <img src="https://via.placeholder.com/150x50?text=EMR+Logo" alt="EMR Logo" class="h-12 object-contain">
-        <img src="https://via.placeholder.com/150x50?text=C桩Cigna+Logo" alt="Cigna Logo" class="h-12 object-contain">
-        <img src="https://via.placeholder.com/150x50?text=Aetna+Logo" alt="Aetna Logo" class="h-12 object-contain">
-      </div>
-    </section>
+  <main>
+    <h1>Patient Registration</h1>
+    <form id="patient-registration" novalidate>
+      <label for="firstName">First Name *</label>
+      <input id="firstName" name="firstName" type="text" required autocomplete="given-name" />
 
-    <!-- Patient Form -->
-    <section id="patient" class="bg-white p-6 rounded-lg shadow-lg mb-8">
-      <h2 class="text-2xl font-semibold mb-4 text-primary">Patient Information</h2>
-      <form id="patientForm" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label for="firstName" class="block text-sm font-medium text-text">First Name</label>
-            <input type="text" id="firstName" name="firstName" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-          </div>
-          <div>
-            <label for="lastName" class="block text-sm font-medium text-text">Last Name</label>
-            <input type="text" id="lastName" name="lastName" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-          </div>
-        </div>
-        <div>
-          <label for="dob" class="block text-sm font-medium text-text">Date of Birth</label>
-          <input type="date" id="dob" name="dob" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="phone" class="block text-sm font-medium text-text">Phone Number</label>
-          <input type="tel" id="phone" name="phone" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label for="emergencyContactName" class="block text-sm font-medium text-text">Emergency Contact Name</label>
-            <input type="text" id="emergencyContactName" name="emergencyContactName" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-          </div>
-          <div>
-            <label for="emergencyContactRelationship" class="block text-sm font-medium text-text">Relationship</label>
-            <input type="text" id="emergencyContactRelationship" name="emergencyContactRelationship" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-          </div>
-        </div>
-        <div>
-          <label for="email" class="block text-sm font-medium text-text">Email</label>
-          <input type="email" id="email" name="email" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="insuranceProvider" class="block text-sm font-medium text-text">Insurance Provider</label>
-          <select id="insuranceProvider" name="insuranceProvider" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-            <option value="" disabled selected>Select an insurance provider</option>
-            <option value="NYShip">NYShip</option>
-            <option value="BCBS">BCBS</option>
-            <option value="EMR">EMR</option>
-            <option value="Cigna">Cigna</option>
-            <option value="Aetna">Aetna</option>
-            <option value="UnitedHealthcare">UnitedHealthcare</option>
-            <option value="Humana">Humana</option>
-            <option value="Kaiser Permanente">Kaiser Permanente</option>
-          </select>
-        </div>
-        <div>
-          <label for="memberId" class="block text-sm font-medium text-text">Member ID/Policy Number</label>
-          <input type="text" id="memberId" name="memberId" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="groupNumber" class="block text-sm font-medium text-text">Group Number (Optional)</label>
-          <input type="text" id="groupNumber" name="groupNumber" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div class="flex items-center">
-          <input type="checkbox" id="luxuryFacility" name="luxuryFacility" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-          <label for="luxuryFacility" class="ml-2 block text-sm text-text">I am willing to travel to a luxury treatment facility if given the opportunity</label>
-        </div>
-        <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700">Submit</button>
-      </form>
-      <div id="facilityResults" class="mt-4"></div>
-    </section>
+      <label for="lastName">Last Name *</label>
+      <input id="lastName" name="lastName" type="text" required autocomplete="family-name" />
 
-    <!-- Clinical Assessment Form -->
-    <section id="clinicalForm" class="bg-white p-6 rounded-lg shadow-lg mb-8 hidden">
-      <h2 class="text-2xl font-semibold mb-4 text-primary">Clinical Assessment</h2>
-      <form id="clinicalAssessmentForm" class="space-y-4">
-        <div>
-          <label for="fullName" class="block text-sm font-medium text-text">Full Name (Auto-filled)</label>
-          <input type="text" id="fullName" name="fullName" readonly class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100">
-        </div>
-        <div>
-          <label for="userId" class="block text-sm font-medium text-text">User ID</label>
-          <input type="text" id="userId" name="userId" readonly class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100">
-        </div>
-        <div>
-          <label for="substance" class="block text-sm font-medium text-text">Substance(s) Used</label>
-          <input type="text" id="substance" name="substance" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="frequency" class="block text-sm font-medium text-text">Frequency of Use</label>
-          <input type="text" id="frequency" name="frequency" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="duration" class="block text-sm font-medium text-text">Duration of Use</label>
-          <input type="text" id="duration" name="duration" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="lastUse" class="block text-sm font-medium text-text">Last Date of Use</label>
-          <input type="date" id="lastUse" name="lastUse" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="legalIssues" class="block text-sm font-medium text-text">Legal Issues</label>
-          <textarea id="legalIssues" name="legalIssues" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="medicalIssues" class="block text-sm font-medium text-text">Medical Issues</label>
-          <textarea id="medicalIssues" name="medicalIssues" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="treatmentHistory" class="block text-sm font-medium text-text">Treatment History (Name, Locations, Levels of Care)</label>
-          <textarea id="treatmentHistory" name="treatmentHistory" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="adl" class="block text-sm font-medium text-text">Can you perform daily activities of living (ADLs)?</label>
-          <textarea id="adl" name="adl" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="medications" class="block text-sm font-medium text-text">List of Medications Currently Taking</label>
-          <textarea id="medications" name="medications" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="allergies" class="block text-sm font-medium text-text">Allergies to Food or Medications</label>
-          <textarea id="allergies" name="allergies" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="mentalHealth" class="block text-sm font-medium text-text">Mental Health (Suicidal Thoughts, Current or Past)</label>
-          <textarea id="mentalHealth" name="mentalHealth" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="familyInfo" class="block text-sm font-medium text-text">Family Info (Single, Married, Kids)</label>
-          <textarea id="familyInfo" name="familyInfo" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="reasonForHelp" class="block text-sm font-medium text-text">Why are you seeking help?</label>
-          <textarea id="reasonForHelp" name="reasonForHelp" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="signature" class="block text-sm font-medium text-text">E-Signature</label>
-          <canvas id="signature" class="signature-pad mt-1"></canvas>
-          <button type="button" id="clearSignature" class="mt-2 bg-gray-300 text-text py-1 px-3 rounded-md hover:bg-gray-400">Clear Signature</button>
-        </div>
-        <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700">Submit Clinical Assessment</button>
-      </form>
-    </section>
+      <label for="dob">Date of Birth *</label>
+      <input id="dob" name="dob" type="date" required max="" />
 
-    <!-- Facility Page -->
-    <section id="facility" class="bg-white p-6 rounded-lg shadow-lg mb-8">
-      <h2 class="text-2xl font-semibold mb-4 text-primary">Facility Portal</h2>
-      <p class="text-text mb-4">TrueCare provides verified, actionable leads for patients actively seeking treatment, willing to travel, and covered by insurance policies your facility accepts for just $20,000/month—compared to $4,000/day on traditional call costs. Our optional AI-powered call qualification system, available at an additional cost, ensures no leads are missed, saving facilities an average of $70-80k annually.</p>
-      <ul class="list-disc list-inside text-text mb-4">
-        <li>Cost-effective leads: $20,000/month for verified patients</li>
-        <li>Optional AI qualifiers: Professional, seamless call handling (additional cost)</li>
-        <li>High availability: Eliminate missed calls and reduce staffing costs</li>
-      </ul>
-      <h3 class="text-lg font-semibold mb-2 text-primary">Facility Sign-Up</h3>
-      <form id="facilityForm" class="space-y-4">
-        <div>
-          <label for="facilityName" class="block text-sm font-medium text-text">Facility Name</label>
-          <input type="text" id="facilityName" name="facilityName" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="facilityWebsite" class="block text-sm font-medium text-text">Website</label>
-          <input type="url" id="facilityWebsite" name="facilityWebsite" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="facilityLocation" class="block text-sm font-medium text-text">Location</label>
-          <input type="text" id="facilityLocation" name="facilityLocation" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-        </div>
-        <div>
-          <label for="levelsOfCare" class="block text-sm font-medium text-text">Levels of Care Offered</label>
-          <textarea id="levelsOfCare" name="levelsOfCare" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <div>
-          <label for="treatmentSpecialties" class="block text-sm font-medium text-text">Treatment Specialties</label>
-          <textarea id="treatmentSpecialties" name="treatmentSpecialties" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-        </div>
-        <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700">Sign Up</button>
-      </form>
-      <div class="mt-4">
-        <h3 class="text-lg font-semibold mb-2 text-primary">Interested in Learning More?</h3>
-        <form id="inquiryForm" class="space-y-4">
-          <div>
-            <label for="inquiryEmail" class="block text-sm font-medium text-text">Email</label>
-            <input type="email" id="inquiryEmail" name="inquiryEmail" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary">
-          </div>
-          <div>
-            <label for="inquiryMessage" class="block text-sm font-medium text-text">Message</label>
-            <textarea id="inquiryMessage" name="inquiryMessage" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
-          </div>
-          <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700">Submit Inquiry</button>
-        </form>
-      </div>
-    </section>
+      <label for="phone">Phone Number *</label>
+      <input id="phone" name="phone" type="tel" required placeholder="+1 555 123 4567" />
 
-    <!-- AI Call Room Section -->
-    <section class="bg-background p-6 rounded-lg shadow-lg">
-      <h2 class="text-2xl font-semibold mb-4 text-primary">Our AI-Powered Call Center</h2>
-      <p class="text-text mb-4">Our optional AI-powered call qualifiers (additional cost) ensure no call goes unanswered, with professional interactions that save facilities significant costs.</p>
-      <img src="https://via.placeholder.com/600x300?text=AI+Call+Room" alt="AI Call Room" class="w-full rounded-md shadow-md">
-    </section>
+      <label for="emergencyContact">Emergency Contact (Name & Relationship) *</label>
+      <input id="emergencyContact" name="emergencyContact" type="text" required />
+
+      <label for="email">Email Address *</label>
+      <input id="email" name="email" type="email" required autocomplete="email" />
+
+      <label for="insuranceProvider">Insurance Provider *</label>
+      <select id="insuranceProvider" name="insuranceProvider" required>
+        <option value="" disabled selected>Select your provider</option>
+        <option value="nyship">NYShip</option>
+        <option value="bcbs">BCBS</option>
+        <option value="emr">EMR</option>
+        <option value="cigna">Cigna</option>
+        <option value="aetna">Aetna</option>
+      </select>
+
+      <label for="memberId">Member ID / Policy Number *</label>
+      <input id="memberId" name="memberId" type="text" required />
+
+      <label for="groupNumber">Group Number (optional)</label>
+      <input id="groupNumber" name="groupNumber" type="text" />
+
+      <label class="checkbox-label" for="travelLuxury">
+        <input type="checkbox" id="travelLuxury" name="travelLuxury" />
+        Would you travel to a luxury treatment facility if given the opportunity?
+      </label>
+
+      <button type="submit">Register</button>
+    </form>
   </main>
 
-  <footer class="gradient-bg text-white py-6">
-    <div class="container mx-auto px-4 text-center">
-      <p>© 2025 TrueCare. All rights reserved.</p>
-    </div>
-  </footer>
-
   <script>
-    let signaturePad;
-    try {
-      const canvas = document.getElementById('signature');
-      signaturePad = new SignaturePad(canvas, {
-        backgroundColor: 'rgb(255, 255, 255)'
-      });
-      function resizeCanvas() {
-        const ratio = Math.max(window.devicePixelRatio || 1, 1);
-        canvas.width = canvas.offsetWidth * ratio;
-        canvas.height = canvas.offsetHeight * ratio;
-        canvas.getContext('2d').scale(ratio, ratio);
-        signaturePad.clear();
-      }
-      window.addEventListener('resize', resizeCanvas);
-      resizeCanvas();
-      document.getElementById('clearSignature').addEventListener('click', () => {
-        signaturePad.clear();
-      });
-      console.log("SignaturePad initialized successfully");
-    } catch (error) {
-      console.error("SignaturePad initialization failed:", error);
-    }
+    // Set max date for DOB to today
+    document.getElementById('dob').max = new Date().toISOString().split('T')[0];
 
-    document.getElementById('patientForm').addEventListener('submit', async (e) => {
+    const form = document.getElementById('patient-registration');
+
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      try {
-        const formData = new FormData(e.target);
-        const patientData = Object.fromEntries(formData);
-        patientData.userId = generateUUID();
-        patientData.submissionDate = new Date().toISOString();
 
-        if (!window.db) throw new Error("Firestore not initialized");
-        await addDoc(collection(window.db, 'patients'), patientData);
-        console.log("Patient data saved:", patientData);
-
-        document.getElementById('fullName').value = `${patientData.firstName} ${patientData.lastName}`;
-        document.getElementById('userId').value = patientData.userId;
-        document.getElementById('clinicalForm').classList.remove('hidden');
-
-        const facilitiesQuery = query(
-          collection(window.db, 'facilities'),
-          where('acceptedInsurances', 'array-contains', patientData.insuranceProvider)
-        );
-        const facilitiesSnapshot = await getDocs(facilitiesQuery);
-
-        const facilityResults = document.getElementById('facilityResults');
-        facilityResults.innerHTML = '<h3 class="text-lg font-semibold mb-2 text-primary">Matching Facilities</h3>';
-        const selectedFacilities = [];
-        facilitiesSnapshot.forEach(doc => {
-          const facility = doc.data();
-          const facilityDiv = document.createElement('div');
-          facilityDiv.className = 'border p-4 mb-2 rounded-md shadow-sm';
-          facilityDiv.innerHTML = `
-            <p><strong>${facility.name}</strong></p>
-            <p>${facility.location}</p>
-            <p>Levels of Care: ${facility.levelsOfCare}</p>
-            <p>Specialties: ${facility.treatmentSpecialties}</p>
-            <button class="applyButton bg-primary text-white py-1 px-3 rounded-md hover:bg-blue-700" data-id="${doc.id}">Apply</button>
-          `;
-          facilityResults.appendChild(facilityDiv);
-        });
-
-        document.querySelectorAll('.applyButton').forEach(button => {
-          button.addEventListener('click', async () => {
-            if (selectedFacilities.length >= 3) {
-              alert('You can only apply to 3 facilities per login.');
-              return;
-            }
-            const facilityId = button.getAttribute('data-id');
-            selectedFacilities.push(facilityId);
-            await addDoc(collection(window.db, 'applications'), {
-              userId: patientData.userId,
-              facilityId,
-              applicationDate: new Date().toISOString()
-            });
-            button.disabled = true;
-            button.textContent = 'Applied';
-            console.log(`Applied to facility: ${facilityId}`);
-          });
-        });
-      } catch (error) {
-        console.error("Patient form submission failed:", error);
-        alert("An error occurred while submitting the form. Please try again.");
+      if (!form.checkValidity()) {
+        alert('Please fill out all required fields correctly.');
+        return;
       }
+
+      // Collect form data
+      const formData = {
+        firstName: form.firstName.value.trim(),
+        lastName: form.lastName.value.trim(),
+        dob: form.dob.value,
+        phone: form.phone.value.trim(),
+        emergencyContact: form.emergencyContact.value.trim(),
+        email: form.email.value.trim(),
+        insuranceProvider: form.insuranceProvider.value,
+        memberId: form.memberId.value.trim(),
+        groupNumber: form.groupNumber.value.trim(),
+        travelLuxury: form.travelLuxury.checked,
+      };
+
+      console.log('Patient Registration Data:', formData);
+
+      // TODO: Integrate with Firebase or backend API here
+
+      alert('Registration submitted successfully!');
+
+      form.reset();
     });
-
-    document.getElementById('clinicalAssessmentForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        if (signaturePad.isEmpty()) {
-          alert('Please provide a signature.');
-          return;
-        }
-        const formData = new FormData(e.target);
-        const clinicalData = Object.fromEntries(formData);
-        clinicalData.signature = signaturePad.toDataURL();
-        clinicalData.submissionDate = new Date().toISOString();
-
-        await addDoc(collection(window.db, 'clinicalAssessments'), clinicalData);
-        alert('Clinical assessment submitted successfully!');
-        e.target.reset();
-        signaturePad.clear();
-        console.log("Clinical assessment submitted:", clinicalData);
-      } catch (error) {
-        console.error("Clinical assessment submission failed:", error);
-        alert("An error occurred while submitting the clinical assessment. Please try again.");
-      }
-    });
-
-    document.getElementById('facilityForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        const formData = new FormData(e.target);
-        const facilityData = Object.fromEntries(formData);
-        await addDoc(collection(window.db, 'facilities'), facilityData);
-        alert('Facility sign-up successful!');
-        e.target.reset();
-        console.log("Facility data saved:", facilityData);
-      } catch (error) {
-        console.error("Facility form submission failed:", error);
-        alert("An error occurred while submitting the facility form. Please try again.");
-      }
-    });
-
-    document.getElementById('inquiryForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        const formData = new FormData(e.target);
-        const inquiryData = Object.fromEntries(formData);
-        await addDoc(collection(window.db, 'inquiries'), inquiryData);
-        alert('Inquiry submitted successfully!');
-        e.target.reset();
-        console.log("Inquiry submitted:", inquiryData);
-      } catch (error) {
-        console.error("Inquiry form submission failed:", error);
-        alert("An error occurred while submitting the inquiry. Please try again.");
-      }
-    });
-
-    function generateUUID() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-    }
   </script>
 </body>
 </html>
